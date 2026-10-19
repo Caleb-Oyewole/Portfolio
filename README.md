@@ -25,11 +25,11 @@ Portfolio/
 │       │   ├── schemas.py       request/response models (Pydantic)
 │       │   ├── security.py      password hashing, JWT, rate limiting
 │       │   ├── email_service.py SMTP sending (prints to console if SMTP is unset)
+│       │   ├── seed.py          startup helpers: first admin user + placeholder content
 │       │   └── routers/
 │       │       ├── public.py    open endpoints
 │       │       ├── admin.py     login + protected content management
 │       │       └── github.py    GitHub profile and projects
-│       ├── seed.py              creates tables, admin user, placeholder content
 │       ├── reset_admin.py       resets the admin login from .env
 │       ├── requirements.txt
 │       └── .env.example
@@ -68,11 +68,12 @@ source .venv/Scripts/activate            # macOS/Linux: source .venv/bin/activat
 cd portfolio-backend/backend
 pip install -r requirements.txt
 cp .env.example .env                     # then fill in the values (see Configuration)
-python seed.py                           # tables, admin user, placeholder content
-uvicorn app.main:app --reload
+uvicorn app.main:app --reload            # first start creates the tables, the admin user and placeholder content
 ```
 
 The API runs at <http://127.0.0.1:8000> and interactive docs are at <http://127.0.0.1:8000/docs>.
+
+There is no separate seed command: `seed.py` is imported by the app and runs automatically on startup.
 
 **First login:** in `/docs`, call `POST /api/admin/login` with your admin email and password, copy the `access_token` from the response, click **Authorize** and paste it. Then use `PUT /api/admin/profile` to fill in your real details. If you ever lose access, run `python reset_admin.py` to reset the admin to the values in `.env`.
 
@@ -98,11 +99,12 @@ Both apps are configured with environment variables. `.env` files are git-ignore
 | Setting | Purpose |
 |---|---|
 | `SECRET_KEY` | Signs login tokens. Use a long random string. |
-| `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Admin login created by `seed.py` / `reset_admin.py` |
+| `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Admin login, created on first startup (or reset with `python reset_admin.py`) |
 | `FRONTEND_URL` | Frontend address, used in newsletter confirm and unsubscribe links |
-| CORS origins, database URL | See `.env.example` / `config.py` for the exact names |
+| `DATABASE_URL` | Database connection string (SQLite locally, PostgreSQL in production) |
+| `CORS_ORIGINS` | Frontend origin(s) allowed to call the API, comma-separated. Must match the address in your browser, e.g. `http://localhost:5173` |
 | `SMTP_*`, `MAIL_FROM`, `CONTACT_INBOX` | Real email sending and where contact messages go. With no SMTP host, emails print to the terminal. |
-| `GITHUB_USERNAME` | Whose repos to show |
+| `GITHUB_USERNAME` | Whose repos to show (defaults are built into `app/routers/github.py`; set these in `.env` to override) |
 | `GITHUB_FEATURED_REPOS` | Comma-separated repo names to always show first |
 | `GITHUB_MIN_STARS`, `GITHUB_TOPIC` | Also show repos with enough stars or this GitHub topic (default `portfolio`) |
 | `GITHUB_TOKEN`, `GITHUB_CACHE_MINUTES` | Optional: higher GitHub rate limit, and how long results are cached |
@@ -172,7 +174,7 @@ The two apps deploy separately from this same repo, each from its own folder.
 - Build: `pip install -r requirements.txt`
 - Start: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
 - Set the environment variables from the table above in the host's dashboard. Use a PostgreSQL database URL in production (a hosted SQLite file would be wiped on redeploy), and set the CORS origins and `FRONTEND_URL` to the deployed frontend address.
-- Run `seed.py` once against the production database to create the admin user.
+- The admin user and placeholder content are created automatically the first time the app starts against an empty database.
 
 **Frontend** (for example Vercel or Netlify)
 - Root directory: `portfolio-frontend`
@@ -182,9 +184,20 @@ The two apps deploy separately from this same repo, each from its own folder.
 
 ## Security notes
 
-- Never commit `.env` or the local `portfolio.db`; both are git-ignored. If a secret is ever committed, rotate it, because deleting the file does not remove it from Git history.
+- Never commit `.env` or the local `portfolio.db`; both are git-ignored. Keep `.env.example` to placeholders only, since it is committed. If a secret is ever committed, rotate it, because deleting the file does not remove it from Git history.
 - Passwords are hashed with PBKDF2, admin routes require a signed token, and public form endpoints are rate limited and protected by a honeypot field.
 - The rate limiter keeps its counts in memory, which is fine for a single server instance.
+
+## Troubleshooting
+
+| Symptom | Cause and fix |
+|---|---|
+| `python seed.py` says "No such file", or "attempted relative import" | `seed.py` is not a script and you don't need to run it. Just start the app with `uvicorn app.main:app --reload` from `portfolio-backend/backend`. |
+| Site shows fallback content, or "Can't reach the backend" in Selected Work | The backend isn't running or isn't reachable. Start it, open <http://127.0.0.1:8000/api/health> (should show `{"status":"ok"}`), then refresh. DevTools > Console says which call failed. |
+| Browser console mentions CORS | Open the site at exactly an address listed in `CORS_ORIGINS` (`localhost` and `127.0.0.1` count as different origins), then restart the backend. |
+| Selected Work is empty but the backend is running | Open `/api/github/projects` on the backend. Repos only show if they are not forks, and are in `GITHUB_FEATURED_REPOS`, have the `portfolio` topic, or have enough stars. |
+| Edited `.env` but nothing changed | Restart the backend. `--reload` only watches Python files. |
+| A "Sample Project" or "Sample Achievement" card appears | Placeholder seed content. Delete it with `DELETE /api/admin/projects/{id}` and `DELETE /api/admin/achievements/{id}`. |
 
 ## Status and roadmap
 

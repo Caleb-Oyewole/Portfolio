@@ -105,7 +105,7 @@ function ProjectCard({ project: p, index }) {
 }
 
 export default function Work() {
-  const { projects, githubUrl, loading } = useSite()
+  const { projects, githubUrl, loading, offline } = useSite()
   const [filter, setFilter] = useState('All')
 
   const filters = useMemo(() => {
@@ -159,7 +159,17 @@ export default function Work() {
         </div>
       ) : visible.length === 0 ? (
         <p className="empty">
-          Projects will show up here once your GitHub username is set in the backend&apos;s <code>.env</code>.
+          {offline ? (
+            <>
+              Can&apos;t reach the backend. Start it with <code>uvicorn app.main:app --reload</code>, then refresh this page.
+            </>
+          ) : projects.length > 0 ? (
+            <>No projects match this filter.</>
+          ) : (
+            <>
+              No projects to show yet. Open <code>/api/github/projects</code> on your backend to see why.
+            </>
+          )}
         </p>
       ) : (
         <motion.div className="grid" layout>

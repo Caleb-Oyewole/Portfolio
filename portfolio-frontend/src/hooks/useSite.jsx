@@ -69,6 +69,10 @@ export function SiteProvider({ children }) {
       api.githubProjects(),
     ]).then(([p, a, s, m, g]) => {
       if (!alive) return
+      // Helps debugging: DevTools > Console says exactly which call failed and why.
+      ;[['profile', p], ['achievements', a], ['skills', s], ['projects', m], ['GitHub projects', g]].forEach(([name, r]) => {
+        if (r.status === 'rejected') console.warn(`[portfolio] could not load ${name}: ${r.reason?.message}`)
+      })
       const profile = { ...fallbackProfile, ...clean(p.value) }
       if (!Array.isArray(profile.stats)) profile.stats = []
       setState({
