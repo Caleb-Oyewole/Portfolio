@@ -19,7 +19,7 @@ class GithubSettings(BaseSettings):
 
     github_username: str = "Caleb-Oyewole"
     github_token: str = ""            # optional: raises the rate limit from 60 to 5000 req/hour
-    github_featured_repos: str = "Vendly, Sentinel, etl_dags, kwizz, mongodb-eduhub-project"   # comma-separated repo names
+    github_featured_repos: str = "Vendly, Sentinel, etl_dags, kwizz, mongodb-eduhub-project, PortWise"   # comma-separated repo names
     github_min_stars: int = 1
     github_topic: str = "portfolio"
     github_cache_minutes: int = 30
