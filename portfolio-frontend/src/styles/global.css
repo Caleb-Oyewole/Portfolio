@@ -162,8 +162,7 @@ a.pill--solid:hover { background: var(--white); color: var(--ink); transform: tr
    Marquee
    ========================================================================== */
 .marquee { overflow: hidden; background: var(--forest); color: var(--white); padding: 20px 0; border-block: 1px solid var(--forest-900); }
-.marquee__track { display: flex; width: max-content; animation: marquee 38s linear infinite; }
-.marquee:hover .marquee__track { animation-play-state: paused; }
+.marquee__track { display: flex; width: max-content; animation: marquee var(--marquee-time, 38s) linear infinite; will-change: transform; }
 .marquee__track span { display: inline-flex; align-items: center; gap: 28px; padding-right: 28px; font-size: clamp(1.4rem, 3vw, 2.4rem); font-weight: 700; letter-spacing: -0.03em; text-transform: uppercase; white-space: nowrap; }
 .marquee__track .is-outline { color: transparent; -webkit-text-stroke: 1px var(--mint); }
 .marquee__dot { width: 10px; height: 10px; border-radius: 50%; background: var(--mint); }

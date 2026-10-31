@@ -7,6 +7,7 @@ import Home from './pages/Home.jsx'
 import NewsletterConfirm from './pages/NewsletterConfirm.jsx'
 import NewsletterUnsubscribe from './pages/NewsletterUnsubscribe.jsx'
 import NotFound from './pages/NotFound.jsx'
+import AdminApp from './admin/AdminApp.jsx'
 
 function ScrollToTopOnRoute() {
   const { pathname } = useLocation()
@@ -40,6 +41,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/newsletter/confirm/:token" element={<NewsletterConfirm />} />
         <Route path="/newsletter/unsubscribe/:token" element={<NewsletterUnsubscribe />} />
+        <Route path="/admin/*" element={<AdminApp />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </SiteProvider>
