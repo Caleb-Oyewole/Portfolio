@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import EmailMenu from './EmailMenu.jsx'
 import { api } from '../api.js'
 import { useSite } from '../hooks/useSite.jsx'
 import { MaskWords, Reveal } from './motion.jsx'
@@ -27,7 +28,7 @@ export default function Contact() {
   const socials = [
     githubUrl && { label: 'GitHub', href: githubUrl, Icon: GithubIcon },
     profile.linkedin_url && { label: 'LinkedIn', href: profile.linkedin_url, Icon: LinkedinIcon },
-    profile.email && { label: profile.email, href: `mailto:${profile.email}`, Icon: MailIcon },
+    profile.email && { label: profile.email, href: `mailto:${profile.email}`, Icon: MailIcon, mail: profile.email },
   ].filter(Boolean)
 
   return (
@@ -44,11 +45,17 @@ export default function Contact() {
             Together we can build something clear and impactful. Tell me what you&apos;re working on and I&apos;ll get back to you.
           </Reveal>
           <Reveal as="ul" className="contact__social" delay={0.3}>
-            {socials.map(({ label, href, Icon }) => (
+            {socials.map(({ label, href, Icon, mail }) => (
               <li key={label}>
-                <a className="pill pill--solid" href={href} target={href.startsWith('mailto') ? undefined : '_blank'} rel="noopener noreferrer">
-                  <Icon /> {label}
-                </a>
+                {mail ? (
+                  <EmailMenu email={mail} className="pill pill--solid" align="left">
+                    <Icon /> {label}
+                  </EmailMenu>
+                ) : (
+                  <a className="pill pill--solid" href={href} target="_blank" rel="noopener noreferrer">
+                    <Icon /> {label}
+                  </a>
+                )}
               </li>
             ))}
           </Reveal>

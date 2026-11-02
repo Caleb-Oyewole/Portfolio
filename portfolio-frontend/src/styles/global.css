@@ -187,8 +187,8 @@ a.pill--solid:hover { background: var(--white); color: var(--ink); transform: tr
 .about { background: var(--white); }
 .about__text { font-size: clamp(1.5rem, 3.4vw, 3rem); font-weight: 600; line-height: 1.22; letter-spacing: -0.03em; max-width: 24em; position: relative; z-index: 1; }
 .stats { display: flex; flex-wrap: wrap; gap: clamp(28px, 6vw, 90px); margin-top: clamp(48px, 7vw, 90px); padding-top: 32px; border-top: 1px solid var(--grey-200); }
-.stats__item strong { display: block; font-size: clamp(2.4rem, 5vw, 4.2rem); font-weight: 800; letter-spacing: -0.05em; line-height: 1; color: var(--forest); }
-.stats__item span { font-size: 0.85rem; font-weight: 600; color: var(--grey-500); }
+.stats__item strong { display: block; font-size: clamp(4rem, 11vw, 8.5rem); font-weight: 800; letter-spacing: -0.06em; line-height: 0.95; color: var(--forest); font-variant-numeric: tabular-nums; }
+.stats__item > span { display: block; margin-top: 10px; font-size: clamp(1rem, 1.6vw, 1.3rem); font-weight: 700; color: var(--grey-700); }
 
 /* ==========================================================================
    Work / GitHub projects
@@ -365,3 +365,20 @@ a.pill--solid:hover { background: var(--white); color: var(--ink); transform: tr
 @media (prefers-reduced-motion: reduce) {
   .marquee__track, .dot::after, .pcard--skeleton { animation: none; }
 }
+
+/* Email menu */
+.emailmenu { position: relative; display: inline-block; }
+.emailmenu__panel {
+  position: absolute; bottom: calc(100% + 10px); z-index: 60; min-width: 220px; padding: 8px; display: grid; gap: 2px;
+  background: var(--white); color: var(--ink); border: 1px solid var(--grey-200); border-radius: 16px; box-shadow: 0 20px 50px rgba(8, 10, 9, 0.22);
+  animation: emailmenu-in 0.22s var(--ease);
+}
+.emailmenu--right .emailmenu__panel { right: calc(100% + 12px); bottom: 0; }
+.emailmenu--left .emailmenu__panel { left: 0; }
+.emailmenu__title { padding: 8px 12px 6px; font-size: 0.72rem; font-weight: 700; color: var(--grey-500); word-break: break-all; }
+.emailmenu__panel a, .emailmenu__panel button {
+  display: block; text-align: left; padding: 10px 12px; border-radius: 10px; font: inherit; font-size: 0.9rem; font-weight: 600;
+  color: var(--ink); background: none; border: 0; cursor: pointer; white-space: nowrap; transform: none;
+}
+.emailmenu__panel a:hover, .emailmenu__panel button:hover { background: var(--forest); color: var(--white); }
+@keyframes emailmenu-in { from { opacity: 0; transform: translateY(6px); } }

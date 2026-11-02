@@ -10,8 +10,8 @@ class Settings(BaseSettings):
     frontend_url: str = "http://localhost:5173"
     cors_origins: str = "http://localhost:5173"
 
-    admin_email: str = "admin@example.com"
-    admin_password: str = "change-me-now"
+    admin_email: str = "oyewolecaleb729@gmail.com"
+    admin_password: str = "idan_2026@$$"
 
     smtp_host: str = ""
     smtp_port: int = 587

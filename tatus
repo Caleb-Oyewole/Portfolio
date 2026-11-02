@@ -1,0 +1,16 @@
+warning: in the working copy of 'portfolio-backend/backend/app/config.py', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/portfolio-backend/backend/app/config.py b/portfolio-backend/backend/app/config.py[m
+[1mindex 022cb28..06251da 100644[m
+[1m--- a/portfolio-backend/backend/app/config.py[m
+[1m+++ b/portfolio-backend/backend/app/config.py[m
+[36m@@ -10,8 +10,8 @@[m [mclass Settings(BaseSettings):[m
+     frontend_url: str = "http://localhost:5173"[m
+     cors_origins: str = "http://localhost:5173"[m
+ [m
+[31m-    admin_email: str = "admin@example.com"[m
+[31m-    admin_password: str = "change-me-now"[m
+[32m+[m[32m    admin_email: str = "oyewolecaleb729@gmail.com"[m
+[32m+[m[32m    admin_password: str = "idan_2026@$$"[m
+ [m
+     smtp_host: str = ""[m
+     smtp_port: int = 587[m

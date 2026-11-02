@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { admin } from './adminApi.js'
 import { fmtDate, useLoad } from './hooks.js'
+import { useConfirm } from './useConfirm.jsx'
 
 export default function Newsletter() {
   const issues = useLoad(() => admin.issues())
@@ -8,11 +9,12 @@ export default function Newsletter() {
   const [subject, setSubject] = useState('')
   const [body, setBody] = useState('')
   const [state, setState] = useState({ busy: false, error: '', ok: '' })
+  const [confirm, confirmDialog] = useConfirm()
   const count = stats.data?.subscribers ?? 0
 
   async function send(e) {
     e.preventDefault()
-    if (!window.confirm(`Send "${subject}" to ${count} confirmed subscriber${count === 1 ? '' : 's'}?`)) return
+    if (!(await confirm(`Send "${subject}" to ${count} confirmed subscriber${count === 1 ? '' : 's'}?`, { confirmLabel: 'Send', danger: false }))) return
     setState({ busy: true, error: '', ok: '' })
     try {
       const issue = await admin.sendNewsletter(subject, body)
@@ -28,6 +30,7 @@ export default function Newsletter() {
   return (
     <>
       <h2 className="adm__h">Newsletter</h2>
+      {confirmDialog}
       <form className="adm__form" onSubmit={send}>
         <p className="adm__muted">Plain text. An unsubscribe link is added automatically. Goes to <b>{count}</b> confirmed subscriber{count === 1 ? '' : 's'}.</p>
         <label>Subject<input value={subject} onChange={(e) => setSubject(e.target.value)} required /></label>

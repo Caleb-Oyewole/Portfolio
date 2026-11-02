@@ -19,7 +19,7 @@ messages (list, mark read, delete), subscribers (list, delete),
 newsletter (send, issues)
 
 ## Deploy
-Start command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+Start command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT --proxy-headers --forwarded-allow-ips='*'`
 Set the env vars from `.env.example`. Use a Postgres `DATABASE_URL` in production
 (SQLite files are wiped on most free hosts). Set `CORS_ORIGINS` and `FRONTEND_URL`
 to your deployed frontend URL.

@@ -15,7 +15,7 @@ export const fallbackProfile = {
   linkedin_url: '',
   photo_url: '',
   available: true,
-  stats: [],
+  stats: [{ value: '25+', label: 'Projects' }],
 }
 
 export const fallbackSkills = ['Python', 'FastAPI', 'Docker', 'React', 'Next.js', 'JavaScript', 'Data Pipelines', 'REST APIs']

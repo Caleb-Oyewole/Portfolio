@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import { admin } from './adminApi.js'
 import { fmtDate, useLoad } from './hooks.js'
+import { useConfirm } from './useConfirm.jsx'
 
 export default function Subscribers() {
   const { data, setData, error, loading } = useLoad(() => admin.list('subscribers'))
   const [err, setErr] = useState('')
+  const [confirm, confirmDialog] = useConfirm()
   const confirmed = (data || []).filter((s) => s.confirmed)
 
   async function del(s) {
-    if (!window.confirm(`Remove ${s.email}?`)) return
+    if (!(await confirm(`Remove ${s.email}?`, { confirmLabel: 'Remove' }))) return
     try {
       await admin.deleteSubscriber(s.id)
       setData((d) => d.filter((x) => x.id !== s.id))
@@ -28,6 +30,7 @@ export default function Subscribers() {
         <h2 className="adm__h">Subscribers <small>{confirmed.length} confirmed / {data?.length ?? 0} total</small></h2>
         <button type="button" className="adm__btn" onClick={exportCsv} disabled={!data?.length}>Export CSV</button>
       </div>
+      {confirmDialog}
       {(error || err) && <div className="adm__error">{error || err}</div>}
       {loading && <p className="adm__muted">Loading…</p>}
       {!loading && data?.length === 0 && <p className="adm__muted">No subscribers yet.</p>}

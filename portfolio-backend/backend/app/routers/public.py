@@ -60,7 +60,7 @@ def send_contact(data: schemas.ContactIn, bg: BackgroundTasks, db: Session = Dep
         return {"detail": "Message sent"}
     db.add(models.ContactMessage(name=data.name, email=data.email, subject=data.subject, message=data.message))
     db.commit()
-    inbox = settings.contact_inbox or settings.mail_from
+    inbox = settings.contact_inbox or settings.admin_email
     bg.add_task(
         send_email,
         inbox,

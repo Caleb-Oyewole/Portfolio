@@ -4,7 +4,9 @@ import { useSite } from '../hooks/useSite.jsx'
 import { Reveal, SectionHeading, ease } from './motion.jsx'
 
 const FALLBACK = [
-  { id: 'a', title: 'Achievements will appear here', category: 'Admin API', description: 'Add some with POST /api/admin/achievements.', icon: '' },
+  { id: 'a1', title: 'Hackathon Winner (1×)', category: 'GDG OAU', description: 'Winner of a hackathon organised by GDG OAU.', icon: '🏆' },
+  { id: 'a2', title: 'Diploma in Data Engineering', category: 'AltSchool Africa', description: 'Completed a diploma in Data Engineering at AltSchool Africa.', icon: '🎓' },
+  { id: 'a3', title: 'Logistics Lead', category: 'IEEE SPAW 3.0', description: 'Led logistics for IEEE SPAW 3.0.', icon: '🧭' },
 ]
 
 export default function Achievements() {

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { admin } from './adminApi.js'
 import { useLoad } from './hooks.js'
+import { useConfirm } from './useConfirm.jsx'
 
 // Field configs mirror the backend schemas (ProjectIn, AchievementIn, SkillIn).
 export const collections = {
@@ -45,6 +46,7 @@ export default function Collection({ kind }) {
   const { data, error, loading, reload } = useLoad(() => admin.list(kind), [kind])
   const [editing, setEditing] = useState(null) // { id|null, values }
   const [msg, setMsg] = useState({ error: '', busy: false })
+  const [confirm, confirmDialog] = useConfirm()
 
   const startNew = () => setEditing({ id: null, values: blank(cfg), tagText: '' })
   const startEdit = (item) => {
@@ -70,7 +72,7 @@ export default function Collection({ kind }) {
   }
 
   async function remove(item) {
-    if (!window.confirm(`Delete "${item[cfg.titleKey]}"? This cannot be undone.`)) return
+    if (!(await confirm(`Delete "${item[cfg.titleKey]}"? This cannot be undone.`))) return
     try {
       await admin.remove(kind, item.id)
       reload()
@@ -103,6 +105,7 @@ export default function Collection({ kind }) {
         ))}
       </ul>
 
+      {confirmDialog}
       {editing && (
         <div className="adm__modal" role="dialog" aria-modal="true" onClick={(e) => e.target === e.currentTarget && setEditing(null)}>
           <form className="adm__form adm__sheet" onSubmit={save}>

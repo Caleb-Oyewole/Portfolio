@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { admin } from './adminApi.js'
 import { fmtDate, useLoad } from './hooks.js'
+import { useConfirm } from './useConfirm.jsx'
 
 export default function Messages() {
   const { data, setData, error, loading } = useLoad(() => admin.list('messages'))
   const [openId, setOpenId] = useState(null)
   const [err, setErr] = useState('')
+  const [confirm, confirmDialog] = useConfirm()
 
   async function open(m) {
     setOpenId(openId === m.id ? null : m.id)
@@ -17,7 +19,7 @@ export default function Messages() {
     }
   }
   async function del(m) {
-    if (!window.confirm('Delete this message?')) return
+    if (!(await confirm('Delete this message?'))) return
     try {
       await admin.deleteMessage(m.id)
       setData((d) => d.filter((x) => x.id !== m.id))
@@ -27,6 +29,7 @@ export default function Messages() {
   return (
     <>
       <h2 className="adm__h">Messages</h2>
+      {confirmDialog}
       {(error || err) && <div className="adm__error">{error || err}</div>}
       {loading && <p className="adm__muted">Loading…</p>}
       {!loading && data?.length === 0 && <p className="adm__muted">No messages yet. They arrive from your contact form.</p>}

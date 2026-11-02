@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import EmailMenu from './EmailMenu.jsx'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useSite } from '../hooks/useSite.jsx'
 import { scrollToId } from '../lib/smooth.js'
@@ -49,7 +50,7 @@ export default function Hero() {
   const socials = [
     githubUrl && { label: 'GitHub', href: githubUrl, Icon: GithubIcon },
     profile.linkedin_url && { label: 'LinkedIn', href: profile.linkedin_url, Icon: LinkedinIcon },
-    profile.email && { label: 'Email', href: `mailto:${profile.email}`, Icon: MailIcon },
+    profile.email && { label: 'Email', href: `mailto:${profile.email}`, Icon: MailIcon, mail: profile.email },
   ].filter(Boolean)
 
   return (
@@ -116,16 +117,22 @@ export default function Hero() {
         </motion.div>
 
         <motion.ul className="hero__social" style={{ opacity: fade }}>
-          {socials.map(({ label, href, Icon }, i) => (
+          {socials.map(({ label, href, Icon, mail }, i) => (
             <motion.li
               key={label}
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, ease, delay: 1.1 + i * 0.1 }}
             >
-              <a className="pill" href={href} target={href.startsWith('mailto') ? undefined : '_blank'} rel="noopener noreferrer">
-                <Icon /> {label}
-              </a>
+              {mail ? (
+                <EmailMenu email={mail} className="pill" align="right">
+                  <Icon /> {label}
+                </EmailMenu>
+              ) : (
+                <a className="pill" href={href} target="_blank" rel="noopener noreferrer">
+                  <Icon /> {label}
+                </a>
+              )}
             </motion.li>
           ))}
         </motion.ul>

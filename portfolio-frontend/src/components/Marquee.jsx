@@ -1,7 +1,7 @@
 import { useSite } from '../hooks/useSite.jsx'
 import { fallbackSkills } from '../content.js'
 
-// Always shown in the band, merged with any skills added from the admin dashboard.
+// Your own skills (from the dashboard) come first, then these are always added after them.
 const stackItems = [
   'Python', 'FastAPI', 'React', 'Next.js', 'Docker', 'PostgreSQL', 'pgAdmin 4',
   'SQLAlchemy', 'JavaScript', 'Git & GitHub',
@@ -23,7 +23,7 @@ const unique = (list) => {
 export default function Marquee() {
   const { skills } = useSite()
   const fromApi = skills.length ? skills.map((s) => s.name) : fallbackSkills
-  let group = unique([...stackItems, ...fromApi])
+  let group = unique([...fromApi, ...stackItems])
   if (group.length % 2) group = [...group, ...group] // keep the pattern even
   const half = Array.from({ length: Math.max(1, Math.ceil(14 / group.length)) }, () => group).flat()
   const track = [...half, ...half]

@@ -77,3 +77,7 @@
   .adm__top { display: flex; }
   .adm__grid, .adm__row { grid-template-columns: 1fr; }
 }
+.adm__btn--dangerfill { background: #a3201b; border-color: #a3201b; color: var(--white); }
+.adm__btn--dangerfill:hover:not(:disabled) { background: #7e1814 !important; border-color: #7e1814 !important; }
+.adm__confirm { width: min(400px, 100%); }
+.adm__confirm p { margin: 0 0 20px; font-weight: 600; line-height: 1.5; }
