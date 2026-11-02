@@ -11,6 +11,7 @@ import Niches from '../components/Niches.jsx'
 import Achievements from '../components/Achievements.jsx'
 import Contact from '../components/Contact.jsx'
 import Footer from '../components/Footer.jsx'
+import Terminal from '../components/Terminal.jsx'
 
 export default function Home() {
   const { profile } = useSite()
@@ -41,6 +42,7 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
+      <Terminal />
     </>
   )
 }

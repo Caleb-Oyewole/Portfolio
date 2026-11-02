@@ -382,3 +382,52 @@ a.pill--solid:hover { background: var(--white); color: var(--ink); transform: tr
 }
 .emailmenu__panel a:hover, .emailmenu__panel button:hover { background: var(--forest); color: var(--white); }
 @keyframes emailmenu-in { from { opacity: 0; transform: translateY(6px); } }
+
+/* ==========================================================================
+   Terminal (creative feature)
+   ========================================================================== */
+.term-launch {
+  position: fixed; left: clamp(14px, 2.5vw, 28px); bottom: clamp(14px, 2.5vw, 28px); z-index: 58;
+  display: inline-flex; align-items: center; gap: 10px; padding: 8px 16px 8px 8px; border-radius: 999px;
+  background: var(--black); color: var(--white); border: 1px solid rgba(185, 216, 196, 0.35); cursor: pointer;
+  font: inherit; font-size: 0.85rem; font-weight: 700; box-shadow: 0 10px 30px rgba(8, 10, 9, 0.3);
+  transition: transform 0.3s var(--ease), background 0.3s var(--ease);
+}
+.term-launch:hover { transform: translateY(-3px); background: var(--forest); }
+.term-launch__icon { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--forest); color: var(--mint); font-family: ui-monospace, Consolas, monospace; font-size: 0.8rem; position: relative; }
+.term-launch__icon::after { content: ''; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid var(--mint); opacity: 0; animation: term-ping 2.4s ease-out infinite; }
+.term-launch__text { display: inline-flex; align-items: center; gap: 8px; }
+.term-launch kbd { font-family: ui-monospace, Consolas, monospace; font-size: 0.72rem; padding: 1px 7px; border-radius: 6px; background: rgba(255, 255, 255, 0.14); }
+@keyframes term-fold { to { max-width: 0; opacity: 0; } }
+@keyframes term-ping { 0% { transform: scale(0.85); opacity: 0.8; } 100% { transform: scale(1.5); opacity: 0; } }
+.term { position: fixed; inset: 0; z-index: 90; display: grid; place-items: center; padding: 16px; background: rgba(8, 10, 9, 0.62); backdrop-filter: blur(4px); animation: term-fade 0.25s var(--ease); }
+@keyframes term-fade { from { opacity: 0; } }
+.term__win { width: min(760px, 100%); height: min(560px, 86vh); display: flex; flex-direction: column; background: #080a09; color: var(--mint); border: 1px solid var(--forest); border-radius: 16px; overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5); font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; animation: term-pop 0.35s var(--ease); }
+@keyframes term-pop { from { opacity: 0; transform: translateY(16px) scale(0.98); } }
+.term__bar { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: var(--forest-900); border-bottom: 1px solid var(--forest); }
+.term__dots { display: inline-flex; gap: 6px; }
+.term__dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--forest-600); }
+.term__title { flex: 1; font-size: 0.8rem; color: var(--grey-300); }
+.term__close { background: none; border: 0; color: var(--grey-300); font: inherit; font-size: 0.75rem; cursor: pointer; padding: 4px 6px; }
+.term__close:hover { color: var(--white); }
+.term__body { flex: 1; overflow-y: auto; padding: 16px; font-size: 0.88rem; line-height: 1.6; }
+.term__line { white-space: pre-wrap; word-break: break-word; animation: term-line 0.25s var(--ease); }
+@keyframes term-line { from { opacity: 0; transform: translateY(4px); } }
+.term__line--cmd { color: var(--white); margin-top: 8px; }
+.term__prompt { color: #5fbf8a; font-weight: 700; }
+.term__line a { color: var(--white); text-decoration: underline; text-underline-offset: 3px; }
+.term__chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 14px 0; }
+.term__chips button { font: inherit; font-size: 0.75rem; padding: 5px 11px; border-radius: 999px; border: 1px solid var(--forest-600); background: none; color: var(--mint); cursor: pointer; transition: background 0.2s, color 0.2s; }
+.term__chips button:hover { background: var(--forest); color: var(--white); }
+.term__input { display: flex; align-items: center; gap: 10px; padding: 12px 14px 14px; }
+.term__input input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: var(--white); font: inherit; font-size: 1rem; caret-color: #5fbf8a; }
+.term__input input::placeholder { color: var(--grey-500); }
+@media (max-width: 560px) {
+  .term-launch__text kbd { display: none; }
+  /* on phones the label folds away after a few seconds so it never covers page content */
+  .term-launch__text { overflow: hidden; white-space: nowrap; max-width: 160px; animation: term-fold 0.5s var(--ease) 6s forwards; }
+  .term-launch:has(.term-launch__text) { transition: padding 0.5s var(--ease); }
+  .term { padding: 0; place-items: end center; }
+  .term__win { height: 82vh; border-radius: 16px 16px 0 0; }
+}
+@media (prefers-reduced-motion: reduce) { .term-launch__icon::after, .term, .term__win, .term__line { animation: none; } }

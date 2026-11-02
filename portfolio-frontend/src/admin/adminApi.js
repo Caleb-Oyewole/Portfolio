@@ -1,5 +1,6 @@
 // Admin calls. The JWT lives in sessionStorage (cleared when the tab closes).
-const BASE = `${(import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000').replace(/\/$/, '')}/api`
+const ROOT = (import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://127.0.0.1:8000' : '')).replace(/\/$/, '')
+const BASE = `${ROOT}/api`
 const KEY = 'portfolio_admin_token'
 
 export const token = {
@@ -18,6 +19,7 @@ let onUnauthorized = () => {}
 export const setUnauthorizedHandler = (fn) => { onUnauthorized = fn }
 
 async function call(path, { method = 'GET', body } = {}) {
+  if (!ROOT) throw new Error('VITE_API_URL is not set for this build.')
   const t = token.get()
   let res
   try {

@@ -1,7 +1,11 @@
 // All backend calls live here. Routes match your FastAPI routers (mounted under /api).
-const BASE = `${(import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000').replace(/\/$/, '')}/api`
+// In development the API defaults to your local backend. In a production build VITE_API_URL must be set
+// (otherwise visitors' browsers would try to call their own localhost); without it the site shows its built-in content.
+const ROOT = (import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://127.0.0.1:8000' : '')).replace(/\/$/, '')
+const BASE = `${ROOT}/api`
 
 async function request(path, options = {}) {
+  if (!ROOT) throw new Error('The API address is not configured.')
   let res
   try {
     res = await fetch(`${BASE}${path}`, {
