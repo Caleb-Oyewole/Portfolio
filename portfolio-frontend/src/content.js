@@ -13,7 +13,7 @@ export const fallbackProfile = {
   email: '',
   github_url: '',
   linkedin_url: '',
-  photo_url: '',
+  photo_url: '/profile.jpg', // put your photo at portfolio-frontend/public/profile.jpg
   available: true,
   stats: [{ value: '25+', label: 'Projects' }],
 }
