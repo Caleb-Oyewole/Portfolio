@@ -195,3 +195,23 @@ Not built yet:
 - An admin dashboard UI (content is managed through `/docs` for now)
 - Individual project detail pages
 - Production deployment
+
+
+## Live demo
+
+- **Website:** https://main.d1hwlxrvcjo1x4.amplifyapp.com
+- **API health check:** https://iapb4yobxb.execute-api.eu-north-1.amazonaws.com/api/health
+
+**Creative feature: an interactive terminal.** Click **"Try my terminal"** (bottom-left of every page) or press the `` ` `` key, then try: `help`, `whoami`, `skills`, `projects`, `open 1`, `achievements`, `goto about`, `hire`.
+
+### Built for the AWS Student Builder Challenge: Build Your Tech Superpower
+
+| Part | AWS service |
+|---|---|
+| Frontend hosting and deploys from GitHub | AWS Amplify Hosting |
+| FastAPI backend | Amazon EC2 |
+| HTTPS in front of the API | Amazon API Gateway (HTTP API) |
+
+Visitor → Amplify (React site) → API Gateway (HTTPS) → EC2 (FastAPI + database) → GitHub API.
+
+Sections: About Me, Skills / Tech Superpowers, Projects and Achievements.
